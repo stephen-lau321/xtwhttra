@@ -1,0 +1,17 @@
+{
+  "name": "new-farmer-skill-matcher",
+  "version": "1.0.0",
+  "description": "新农人技能匹配程序",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "farmer",
+    "skill",
+    "matcher"
+  ],
+  "author": "",
+  "license": "MIT"
+}
