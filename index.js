@@ -1,12 +1,12 @@
-// 新农人技能匹配程序
+// New Farmer Skill Matching Program
 
-// 存储新农人信息的数组
+// Array to store farmers' information
 const farmers = [];
 
-// 存储技能需求的数组
+// Array to store skill requests
 const skillRequests = [];
 
-// 新增新农人
+// Add a new farmer
 function addFarmer(name, skills) {
   farmers.push({
     id: farmers.length + 1,
@@ -16,7 +16,7 @@ function addFarmer(name, skills) {
   console.log(`已添加新农人: ${name}，技能: ${skills}`);
 }
 
-// 新增技能需求
+// Add a new skill request
 function addSkillRequest(title, requiredSkills) {
   skillRequests.push({
     id: skillRequests.length + 1,
@@ -26,7 +26,7 @@ function addSkillRequest(title, requiredSkills) {
   console.log(`已添加技能需求: ${title}，所需技能: ${requiredSkills}`);
 }
 
-// 匹配技能
+// Match skills
 function matchSkills() {
   console.log('\n=== 技能匹配结果 ===');
   
@@ -35,7 +35,7 @@ function matchSkills() {
     console.log(`所需技能: ${request.requiredSkills.join(', ')}`);
     
     const matchedFarmers = farmers.filter(farmer => {
-      // 检查农民是否拥有所有必需技能
+      // Check if farmer has all required skills
       return request.requiredSkills.every(skill => 
         farmer.skills.includes(skill)
       );
@@ -52,7 +52,7 @@ function matchSkills() {
   });
 }
 
-// 显示所有新农人
+// Show all farmers
 function showAllFarmers() {
   console.log('\n=== 所有新农人 ===');
   farmers.forEach(farmer => {
@@ -60,7 +60,7 @@ function showAllFarmers() {
   });
 }
 
-// 显示所有技能需求
+// Show all skill requests
 function showAllSkillRequests() {
   console.log('\n=== 所有技能需求 ===');
   skillRequests.forEach(request => {
@@ -68,23 +68,23 @@ function showAllSkillRequests() {
   });
 }
 
-// 示例数据
+// Sample data
 function addSampleData() {
   console.log('添加示例数据...');
   
-  // 添加新农人
+  // Add farmers
   addFarmer('张三', '种植, 养殖, 电商');
   addFarmer('李四', '养殖, 农产品加工');
   addFarmer('王五', '种植, 电商, 农业技术指导');
   addFarmer('赵六', '农产品加工, 电商');
   
-  // 添加技能需求
+  // Add skill requests
   addSkillRequest('农产品线上销售', '电商, 种植');
   addSkillRequest('养殖场管理', '养殖');
   addSkillRequest('农产品加工与销售', '农产品加工, 电商');
 }
 
-// 主菜单
+// Main menu
 function mainMenu() {
   console.log('\n=== 新农人技能匹配程序 ===');
   console.log('1. 添加新农人');
@@ -96,7 +96,7 @@ function mainMenu() {
   console.log('7. 退出');
 }
 
-// 运行程序
+// Run program
 function runProgram() {
   const readline = require('readline');
   const rl = readline.createInterface({
@@ -149,5 +149,5 @@ function runProgram() {
   processMenu();
 }
 
-// 启动程序
+// Start program
 runProgram();
