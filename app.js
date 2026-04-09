@@ -41,6 +41,17 @@ navBtns.forEach(btn => {
     });
 });
 
+// 预设需求类型选择处理
+const requestTypeSelect = document.getElementById('request-type');
+const requestTitleInput = document.getElementById('request-title');
+
+requestTypeSelect.addEventListener('change', () => {
+    const selectedType = requestTypeSelect.value;
+    if (selectedType) {
+        requestTitleInput.value = selectedType;
+    }
+});
+
 // 添加新农人
 farmerForm.addEventListener('submit', (e) => {
     e.preventDefault();
