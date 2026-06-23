@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { teacherApi } from "../api/client";
 import type { TeacherAuth } from "../types";
@@ -203,7 +203,20 @@ function ClaimStreetForm({ onSuccess }: { onSuccess: () => void }) {
 function ApplyTeacherForm() {
   const [realName, setRealName] = useState("");
   const [instrumentStr, setInstrumentStr] = useState("");
+  const [idCardFront, setIdCardFront] = useState("");
+  const [idCardBack, setIdCardBack] = useState("");
   const [step, setStep] = useState(1);
+
+  function handleFile(file: File, type: "front" | "back") {
+    if (!file.type.startsWith("image/")) { alert("请选择图片文件"); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = e.target?.result as string;
+      if (type === "front") setIdCardFront(data);
+      else setIdCardBack(data);
+    };
+    reader.readAsDataURL(file);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -214,6 +227,8 @@ function ApplyTeacherForm() {
     try {
       await teacherApi.apply({
         realName,
+        idCardFront: idCardFront || undefined,
+        idCardBack: idCardBack || undefined,
         instrumentNames: instrumentStr.split(/[,，、]/).map((s) => s.trim()).filter(Boolean),
       });
       alert("认证申请已提交，等待审核");
@@ -228,9 +243,7 @@ function ApplyTeacherForm() {
       <div className="card p-6 text-center">
         <div className="text-3xl mb-3">✅</div>
         <h3 className="font-medium mb-2">申请已提交</h3>
-        <p className="text-sm text-gray-500">
-          管理员审核通过后，你就可以认领街道了
-        </p>
+        <p className="text-sm text-gray-500">管理员审核通过后，你就可以认领街道了</p>
       </div>
     );
   }
@@ -241,45 +254,39 @@ function ApplyTeacherForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-xs text-gray-500 mb-1">真实姓名</label>
-          <input
-            type="text"
-            value={realName}
-            onChange={(e) => setRealName(e.target.value)}
-            className="input-field"
-            placeholder="与身份证一致"
-          />
+          <input type="text" value={realName} onChange={(e) => setRealName(e.target.value)}
+            className="input-field" placeholder="与身份证一致" />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">
-            擅长的乐器（多个用逗号分隔）
-          </label>
-          <input
-            type="text"
-            value={instrumentStr}
-            onChange={(e) => setInstrumentStr(e.target.value)}
-            className="input-field"
-            placeholder="钢琴, 吉他, 古筝"
-          />
+          <label className="block text-xs text-gray-500 mb-1">擅长的乐器（多个用逗号分隔）</label>
+          <input type="text" value={instrumentStr} onChange={(e) => setInstrumentStr(e.target.value)}
+            className="input-field" placeholder="钢琴, 吉他, 古筝" />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">
-            身份证照片（正反面）
-          </label>
+          <label className="block text-xs text-gray-500 mb-1">身份证照片（正反面）</label>
           <div className="grid grid-cols-2 gap-3">
-            <div className="aspect-[1.6] rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300 text-sm cursor-pointer hover:border-primary-300 transition-colors">
-              上传正面
-            </div>
-            <div className="aspect-[1.6] rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300 text-sm cursor-pointer hover:border-primary-300 transition-colors">
-              上传反面
-            </div>
+            <label className="aspect-[1.6] rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300 text-sm cursor-pointer hover:border-primary-300 transition-colors overflow-hidden">
+              {idCardFront ? (
+                <img src={idCardFront} alt="身份证正面" className="w-full h-full object-cover" />
+              ) : (
+                <span>点击上传正面</span>
+              )}
+              <input type="file" accept="image/*" className="hidden"
+                onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0], "front")} />
+            </label>
+            <label className="aspect-[1.6] rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300 text-sm cursor-pointer hover:border-primary-300 transition-colors overflow-hidden">
+              {idCardBack ? (
+                <img src={idCardBack} alt="身份证反面" className="w-full h-full object-cover" />
+              ) : (
+                <span>点击上传反面</span>
+              )}
+              <input type="file" accept="image/*" className="hidden"
+                onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0], "back")} />
+            </label>
           </div>
-          <p className="text-xs text-gray-400 mt-1">
-            仅用于身份核验，信息加密存储
-          </p>
+          <p className="text-xs text-gray-400 mt-1">仅用于身份核验，信息加密存储</p>
         </div>
-        <button type="submit" className="btn-primary w-full text-sm">
-          提交认证
-        </button>
+        <button type="submit" className="btn-primary w-full text-sm">提交认证</button>
       </form>
     </div>
   );
