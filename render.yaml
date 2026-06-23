@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: notenear
+    env: node
+    plan: free
+    region: singapore
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate --schema=prisma/schema.prod.prisma && npx nest build
+    startCommand: node dist/main.js
+    healthCheckPath: /api/v1/products
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 30d
+      - key: AMAP_API_KEY
+        value: f1392fa410619aad5a6b18ee6da3c168
+      - key: DATABASE_URL
+        fromDatabase:
+          name: notenear-db
+          property: connectionString
+
+databases:
+  - name: notenear-db
+    databaseName: streetmusic
+    user: streetmusic
+    plan: free
+    region: singapore
