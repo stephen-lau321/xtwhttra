@@ -1,4 +1,4 @@
-﻿import { NestFactory } from "@nestjs/core";
+import { NestFactory } from "@nestjs/core";
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
@@ -10,7 +10,7 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.CORS_ORIGINS?.split(",") || [
       "http://localhost:5173",
-      "http://localhost:4173",
+      "http://localhost:4173","https://stephen-lau321.github.io",
     ],
     credentials: true,
   });
