@@ -6,7 +6,7 @@ services:
     region: singapore
     rootDir: backend
     buildCommand: npm install && npx prisma generate --schema=prisma/schema.prod.prisma && npx nest build
-    startCommand: node dist/main.js
+    startCommand: npx prisma db push --schema=prisma/schema.prod.prisma --accept-data-loss && node dist/main.js
     healthCheckPath: /api/v1/products
     envVars:
       - key: JWT_SECRET
